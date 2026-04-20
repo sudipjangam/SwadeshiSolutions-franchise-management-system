@@ -34,6 +34,7 @@ import {
   Building2,
   Ban,
   Store,
+  GitBranch,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -45,6 +46,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useRestaurantId } from "@/hooks/useRestaurantId";
 import { supabase } from "@/integrations/supabase/client";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useOrganizationContext } from "@/contexts/OrganizationContext";
+import { BranchSwitcher } from "@/components/BranchSwitcher/BranchSwitcher";
 
 // Map hrefs to subscription component names
 const hrefToComponentMap: Record<string, string> = {
@@ -295,6 +298,12 @@ const navigationGroups: NavigationGroup[] = [
 // Standalone items outside of groups
 const standaloneItems: NavigationItem[] = [
   {
+    title: "Franchise",
+    icon: GitBranch,
+    href: "/franchise",
+    description: "Manage branches & franchise analytics",
+  },
+  {
     title: "Platform Admin",
     icon: Building2,
     href: "/platform",
@@ -340,6 +349,7 @@ export const ImprovedSidebarNavigation = ({
     useSubscriptionAccess();
   const { toast } = useToast();
   const { restaurantName } = useRestaurantId();
+  const { isMultiBranch, orgRole } = useOrganizationContext();
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
     new Set(["Dashboard", "Operations"]),
   );
@@ -370,34 +380,27 @@ export const ImprovedSidebarNavigation = ({
   ];
 
   // Check if user has permission to access this navigation item
-  // Must satisfy BOTH subscription access AND role-based permission
   const hasPermissionForItem = (item: NavigationItem): boolean => {
     if (!user) return false;
 
-    const componentName = hrefToComponentMap[item.href];
-
-    // System components bypass subscription check (they're controlled by role permissions)
-    const isSystemComponent =
-      componentName && systemComponents.includes(componentName);
-
-    // Check subscription-based access for non-system components
-    if (
-      componentName &&
-      !isSystemComponent &&
-      !hasSubscriptionAccess(componentName)
-    ) {
-      return false; // Component not in subscription plan
+    // Franchise: only show for multi-branch org owner/admin
+    if (item.href === '/franchise') {
+      return isMultiBranch && !!orgRole && ['owner', 'admin'].includes(orgRole);
     }
 
-    // Check explicit role requirement first (e.g., admin-only pages)
+    const componentName = hrefToComponentMap[item.href];
+    const isSystemComponent = componentName && systemComponents.includes(componentName);
+
+    if (componentName && !isSystemComponent && !hasSubscriptionAccess(componentName)) {
+      return false;
+    }
+
     if (item.requiredRole) {
       const currentRole = user.role_name_text || user.role;
       return currentRole?.toLowerCase() === item.requiredRole.toLowerCase();
     }
 
-    // Then check role-based permission
-    if (!item.requiredPermissions || item.requiredPermissions.length === 0)
-      return true;
+    if (!item.requiredPermissions || item.requiredPermissions.length === 0) return true;
     return hasAnyPermission(item.requiredPermissions);
   };
 
@@ -454,6 +457,14 @@ export const ImprovedSidebarNavigation = ({
             </Button>
           </div>
         </div>
+        {isMultiBranch && (
+          <div className="mt-2">
+            <BranchSwitcher
+              showAllBranchesOption={orgRole === 'owner' || orgRole === 'admin'}
+              className="w-full"
+            />
+          </div>
+        )}
       </div>
 
       <ScrollArea className="flex-1 px-3">

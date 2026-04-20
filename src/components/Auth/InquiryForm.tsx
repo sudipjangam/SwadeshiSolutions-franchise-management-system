@@ -10,10 +10,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
-import { ArrowRight, Building2, Mail, Phone, User, Loader2 } from "lucide-react";
+import {
+  ArrowRight,
+  Building2,
+  Mail,
+  Phone,
+  User,
+  Loader2,
+} from "lucide-react";
 
 interface InquiryFormProps {
-  setAuthMode: React.Dispatch<React.SetStateAction<"signin" | "signup" | "inquiry" | "forgot" | "reset">>;
+  setAuthMode: React.Dispatch<
+    React.SetStateAction<"signin" | "signup" | "inquiry" | "forgot" | "reset">
+  >;
 }
 
 const BUSINESS_TYPES = [
@@ -53,8 +62,10 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({ setAuthMode }) => {
     } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
       newErrors.email = "Enter a valid email address";
     }
-    if (!formData.businessName) newErrors.businessName = "Business name is required";
-    if (!formData.businessType) newErrors.businessType = "Business type is required";
+    if (!formData.businessName)
+      newErrors.businessName = "Business name is required";
+    if (!formData.businessType)
+      newErrors.businessType = "Business type is required";
     if (formData.businessType === "Other" && !formData.otherBusinessType) {
       newErrors.otherBusinessType = "Please specify your business type";
     }
@@ -81,32 +92,37 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({ setAuthMode }) => {
         : formData.businessType;
 
     try {
-      const SUPABASE_URL = 'https://clmsoetktmvhazctlans.supabase.co';
-      const response = await fetch(`${SUPABASE_URL}/functions/v1/send-inquiry`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+      const SUPABASE_URL = "https://bpheiklhiwwcrugmxivp.supabase.co";
+      const response = await fetch(
+        `${SUPABASE_URL}/functions/v1/send-inquiry`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+          },
+          body: JSON.stringify({
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            mobile: formData.mobile,
+            email: formData.email,
+            businessName: formData.businessName,
+            businessType: customType,
+          }),
         },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          mobile: formData.mobile,
-          email: formData.email,
-          businessName: formData.businessName,
-          businessType: customType,
-        }),
-      });
+      );
 
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error || 'Failed to send inquiry');
+      if (!response.ok)
+        throw new Error(result.error || "Failed to send inquiry");
 
       toast({
         title: "Inquiry Sent Successfully",
-        description: "We have received your details and will get back to you shortly.",
+        description:
+          "We have received your details and will get back to you shortly.",
         className: "bg-green-50 border-green-200 text-green-800",
       });
-      
+
       setFormData({
         firstName: "",
         lastName: "",
@@ -116,14 +132,14 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({ setAuthMode }) => {
         businessType: "",
         otherBusinessType: "",
       });
-      
+
       setTimeout(() => setAuthMode("signin"), 3000);
-      
     } catch (error) {
       console.error("Error sending inquiry:", error);
       toast({
         title: "Failed to send inquiry",
-        description: "An unexpected error occurred while sending your inquiry. Please try again.",
+        description:
+          "An unexpected error occurred while sending your inquiry. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -132,7 +148,10 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({ setAuthMode }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 px-5 sm:px-8 pb-5 sm:pb-8">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-3 sm:space-y-4 px-5 sm:px-8 pb-5 sm:pb-8"
+    >
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="firstName">First Name</Label>
@@ -141,12 +160,16 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({ setAuthMode }) => {
             <Input
               id="firstName"
               placeholder="First name"
-              className={`pl-9 ${errors.firstName ? 'border-red-500' : ''}`}
+              className={`pl-9 ${errors.firstName ? "border-red-500" : ""}`}
               value={formData.firstName}
-              onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, firstName: e.target.value })
+              }
             />
           </div>
-          {errors.firstName && <span className="text-xs text-red-500">{errors.firstName}</span>}
+          {errors.firstName && (
+            <span className="text-xs text-red-500">{errors.firstName}</span>
+          )}
         </div>
         <div className="space-y-2">
           <Label htmlFor="lastName">Last Name</Label>
@@ -155,12 +178,16 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({ setAuthMode }) => {
             <Input
               id="lastName"
               placeholder="Last name"
-              className={`pl-9 ${errors.lastName ? 'border-red-500' : ''}`}
+              className={`pl-9 ${errors.lastName ? "border-red-500" : ""}`}
               value={formData.lastName}
-              onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, lastName: e.target.value })
+              }
             />
           </div>
-          {errors.lastName && <span className="text-xs text-red-500">{errors.lastName}</span>}
+          {errors.lastName && (
+            <span className="text-xs text-red-500">{errors.lastName}</span>
+          )}
         </div>
       </div>
 
@@ -172,12 +199,16 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({ setAuthMode }) => {
             id="mobile"
             type="tel"
             placeholder="Mobile number"
-            className={`pl-9 ${errors.mobile ? 'border-red-500' : ''}`}
+            className={`pl-9 ${errors.mobile ? "border-red-500" : ""}`}
             value={formData.mobile}
-            onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, mobile: e.target.value })
+            }
           />
         </div>
-        {errors.mobile && <span className="text-xs text-red-500">{errors.mobile}</span>}
+        {errors.mobile && (
+          <span className="text-xs text-red-500">{errors.mobile}</span>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -188,12 +219,16 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({ setAuthMode }) => {
             id="email"
             type="email"
             placeholder="Email address"
-            className={`pl-9 ${errors.email ? 'border-red-500' : ''}`}
+            className={`pl-9 ${errors.email ? "border-red-500" : ""}`}
             value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, email: e.target.value })
+            }
           />
         </div>
-        {errors.email && <span className="text-xs text-red-500">{errors.email}</span>}
+        {errors.email && (
+          <span className="text-xs text-red-500">{errors.email}</span>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -203,21 +238,29 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({ setAuthMode }) => {
           <Input
             id="businessName"
             placeholder="Business Name"
-            className={`pl-9 ${errors.businessName ? 'border-red-500' : ''}`}
+            className={`pl-9 ${errors.businessName ? "border-red-500" : ""}`}
             value={formData.businessName}
-            onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, businessName: e.target.value })
+            }
           />
         </div>
-        {errors.businessName && <span className="text-xs text-red-500">{errors.businessName}</span>}
+        {errors.businessName && (
+          <span className="text-xs text-red-500">{errors.businessName}</span>
+        )}
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="businessType">Business Type</Label>
         <Select
           value={formData.businessType}
-          onValueChange={(val) => setFormData({ ...formData, businessType: val })}
+          onValueChange={(val) =>
+            setFormData({ ...formData, businessType: val })
+          }
         >
-          <SelectTrigger className={errors.businessType ? 'border-red-500' : ''}>
+          <SelectTrigger
+            className={errors.businessType ? "border-red-500" : ""}
+          >
             <SelectValue placeholder="Select business type" />
           </SelectTrigger>
           <SelectContent>
@@ -228,7 +271,9 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({ setAuthMode }) => {
             ))}
           </SelectContent>
         </Select>
-        {errors.businessType && <span className="text-xs text-red-500">{errors.businessType}</span>}
+        {errors.businessType && (
+          <span className="text-xs text-red-500">{errors.businessType}</span>
+        )}
       </div>
 
       {formData.businessType === "Other" && (
@@ -237,11 +282,17 @@ export const InquiryForm: React.FC<InquiryFormProps> = ({ setAuthMode }) => {
           <Input
             id="otherBusinessType"
             placeholder="Please specify"
-            className={errors.otherBusinessType ? 'border-red-500' : ''}
+            className={errors.otherBusinessType ? "border-red-500" : ""}
             value={formData.otherBusinessType}
-            onChange={(e) => setFormData({ ...formData, otherBusinessType: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, otherBusinessType: e.target.value })
+            }
           />
-          {errors.otherBusinessType && <span className="text-xs text-red-500">{errors.otherBusinessType}</span>}
+          {errors.otherBusinessType && (
+            <span className="text-xs text-red-500">
+              {errors.otherBusinessType}
+            </span>
+          )}
         </div>
       )}
 

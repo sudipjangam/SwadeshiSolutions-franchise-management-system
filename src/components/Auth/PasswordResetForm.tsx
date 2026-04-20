@@ -3,15 +3,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
-import { ArrowLeft, Lock, Eye, EyeOff, Loader2, CheckCircle2, ShieldCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  Lock,
+  Eye,
+  EyeOff,
+  Loader2,
+  CheckCircle2,
+  ShieldCheck,
+} from "lucide-react";
 
 interface ResetPasswordFormProps {
-  setAuthMode: React.Dispatch<React.SetStateAction<"signin" | "signup" | "inquiry" | "forgot" | "reset">>;
+  setAuthMode: React.Dispatch<
+    React.SetStateAction<"signin" | "signup" | "inquiry" | "forgot" | "reset">
+  >;
   token?: string;
   email?: string;
 }
 
-export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ setAuthMode, token, email }) => {
+export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
+  setAuthMode,
+  token,
+  email,
+}) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -22,7 +36,8 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ setAuthMod
   const validate = (): string | null => {
     if (password.length < 8) return "Password must be at least 8 characters";
     if (password !== confirmPassword) return "Passwords do not match";
-    if (!token || !email) return "Invalid reset link. Please request a new one.";
+    if (!token || !email)
+      return "Invalid reset link. Please request a new one.";
     return null;
   };
 
@@ -42,26 +57,30 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ setAuthMod
     setLoading(true);
 
     try {
-      const SUPABASE_URL = 'https://clmsoetktmvhazctlans.supabase.co';
-      const response = await fetch(`${SUPABASE_URL}/functions/v1/reset-password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+      const SUPABASE_URL = "https://bpheiklhiwwcrugmxivp.supabase.co";
+      const response = await fetch(
+        `${SUPABASE_URL}/functions/v1/reset-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+          },
+          body: JSON.stringify({ token, email, password }),
         },
-        body: JSON.stringify({ token, email, password }),
-      });
+      );
 
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to reset password');
+        throw new Error(result.error || "Failed to reset password");
       }
 
       setSuccess(true);
       toast({
         title: "Password updated!",
-        description: "Your password has been successfully reset. You can now sign in.",
+        description:
+          "Your password has been successfully reset. You can now sign in.",
         className: "bg-green-50 border-green-200 text-green-800",
       });
 
@@ -87,9 +106,12 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ setAuthMod
           <div className="mx-auto w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
             <ShieldCheck className="w-8 h-8 text-red-600 dark:text-red-400" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Invalid reset link</h3>
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Invalid reset link
+          </h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            This password reset link is invalid or has expired. Please request a new one.
+            This password reset link is invalid or has expired. Please request a
+            new one.
           </p>
         </div>
 
@@ -122,9 +144,12 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ setAuthMod
           <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
             <CheckCircle2 className="w-8 h-8 text-green-600 dark:text-green-400" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Password reset successful!</h3>
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Password reset successful!
+          </h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Your password has been updated. You will be redirected to sign in shortly.
+            Your password has been updated. You will be redirected to sign in
+            shortly.
           </p>
         </div>
 
@@ -147,7 +172,8 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ setAuthMod
           <ShieldCheck className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
         </div>
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          Resetting password for <strong className="text-gray-900 dark:text-white">{email}</strong>
+          Resetting password for{" "}
+          <strong className="text-gray-900 dark:text-white">{email}</strong>
         </p>
         <p className="text-sm text-gray-600 dark:text-gray-400">
           Enter your new password below. It must be at least 8 characters long.
@@ -155,7 +181,10 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ setAuthMod
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="new-password" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <Label
+          htmlFor="new-password"
+          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+        >
           New Password
         </Label>
         <div className="relative group">
@@ -176,16 +205,25 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ setAuthMod
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
           >
-            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            {showPassword ? (
+              <EyeOff className="w-5 h-5" />
+            ) : (
+              <Eye className="w-5 h-5" />
+            )}
           </button>
         </div>
         {password && password.length < 8 && (
-          <p className="text-xs text-amber-600">Password must be at least 8 characters</p>
+          <p className="text-xs text-amber-600">
+            Password must be at least 8 characters
+          </p>
         )}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="confirm-password" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <Label
+          htmlFor="confirm-password"
+          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+        >
           Confirm Password
         </Label>
         <div className="relative group">
@@ -206,22 +244,34 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ setAuthMod
             onClick={() => setShowConfirm(!showConfirm)}
             className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
           >
-            {showConfirm ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            {showConfirm ? (
+              <EyeOff className="w-5 h-5" />
+            ) : (
+              <Eye className="w-5 h-5" />
+            )}
           </button>
         </div>
         {confirmPassword && password !== confirmPassword && (
           <p className="text-xs text-red-500">Passwords do not match</p>
         )}
-        {confirmPassword && password === confirmPassword && confirmPassword.length >= 8 && (
-          <p className="text-xs text-green-600 flex items-center gap-1">
-            <CheckCircle2 className="w-3 h-3" /> Passwords match
-          </p>
-        )}
+        {confirmPassword &&
+          password === confirmPassword &&
+          confirmPassword.length >= 8 && (
+            <p className="text-xs text-green-600 flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3" /> Passwords match
+            </p>
+          )}
       </div>
 
       <Button
         type="submit"
-        disabled={loading || !password || !confirmPassword || password.length < 8 || password !== confirmPassword}
+        disabled={
+          loading ||
+          !password ||
+          !confirmPassword ||
+          password.length < 8 ||
+          password !== confirmPassword
+        }
         className="w-full h-14 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-700 hover:via-purple-700 hover:to-indigo-800 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl text-base"
       >
         {loading ? (

@@ -10,6 +10,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AccessProvider } from "@/contexts/AccessContext";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { NetworkStatusProvider } from "@/contexts/NetworkStatusContext";
+import { OrganizationProvider } from "@/contexts/OrganizationContext";
+
 import { useRealtimeAnalytics } from "@/hooks/useRealtimeAnalytics";
 import { useOfflineCache } from "@/hooks/useOfflineCache";
 import Routes from "./components/Auth/Routes";
@@ -68,18 +70,20 @@ function App() {
       <ThemeProvider defaultTheme="light" storageKey="restaurant-pro-theme">
         <TooltipProvider>
           <AuthProvider>
-            <AccessProvider>
-              <CurrencyProvider>
-                {/* NetworkStatusProvider must be inside AuthProvider to allow sync with auth context */}
-                <NetworkStatusProvider>
-                  <ErrorBoundary>
-                    <Router>
-                      <AppWithRealtime />
-                    </Router>
-                  </ErrorBoundary>
-                </NetworkStatusProvider>
-              </CurrencyProvider>
-            </AccessProvider>
+            <OrganizationProvider>
+              <AccessProvider>
+                <CurrencyProvider>
+                  {/* NetworkStatusProvider must be inside AuthProvider to allow sync with auth context */}
+                  <NetworkStatusProvider>
+                    <ErrorBoundary>
+                      <Router>
+                        <AppWithRealtime />
+                      </Router>
+                    </ErrorBoundary>
+                  </NetworkStatusProvider>
+                </CurrencyProvider>
+              </AccessProvider>
+            </OrganizationProvider>
           </AuthProvider>
         </TooltipProvider>
       </ThemeProvider>

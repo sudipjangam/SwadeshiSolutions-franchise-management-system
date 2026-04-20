@@ -4,13 +4,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { supabase, SUPABASE_DIRECT_URL } from "@/integrations/supabase/client";
-import { ArrowLeft, Mail, Loader2, CheckCircle2, AlertTriangle } from "lucide-react";
+import {
+  ArrowLeft,
+  Mail,
+  Loader2,
+  CheckCircle2,
+  AlertTriangle,
+} from "lucide-react";
 
 interface ForgotPasswordFormProps {
-  setAuthMode: React.Dispatch<React.SetStateAction<"signin" | "signup" | "inquiry" | "forgot" | "reset">>;
+  setAuthMode: React.Dispatch<
+    React.SetStateAction<"signin" | "signup" | "inquiry" | "forgot" | "reset">
+  >;
 }
 
-export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ setAuthMode }) => {
+export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
+  setAuthMode,
+}) => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
@@ -40,20 +50,23 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ setAuthM
 
     try {
       // Step 1: Check if user exists via our Edge Function
-      const SUPABASE_URL = 'https://clmsoetktmvhazctlans.supabase.co';
-      const response = await fetch(`${SUPABASE_URL}/functions/v1/forgot-password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+      const SUPABASE_URL = "https://bpheiklhiwwcrugmxivp.supabase.co";
+      const response = await fetch(
+        `${SUPABASE_URL}/functions/v1/forgot-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+          },
+          body: JSON.stringify({ email: email.trim() }),
         },
-        body: JSON.stringify({ email: email.trim() }),
-      });
+      );
 
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || 'Something went wrong');
+        throw new Error(result.error || "Something went wrong");
       }
 
       if (result.exists) {
@@ -68,7 +81,8 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ setAuthM
         // User does NOT exist → encouragement email sent, show UI notification
         toast({
           title: "Business not registered",
-          description: "This email is not registered with RMS Pro. We've sent you details on how to register your business.",
+          description:
+            "This email is not registered with RMS Pro. We've sent you details on how to register your business.",
           variant: "destructive",
           duration: 8000,
         });
@@ -77,7 +91,10 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ setAuthM
       console.error("Forgot password error:", error);
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to process your request. Please try again.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to process your request. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -93,9 +110,12 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ setAuthM
           <div className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
             <CheckCircle2 className="w-8 h-8 text-green-600 dark:text-green-400" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Check your email</h3>
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Check your email
+          </h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            We've sent a password reset link to <strong className="text-gray-900 dark:text-white">{email}</strong>.
+            We've sent a password reset link to{" "}
+            <strong className="text-gray-900 dark:text-white">{email}</strong>.
             The link will expire in 20 minutes.
           </p>
         </div>
@@ -104,7 +124,8 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ setAuthM
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
             <p className="text-sm text-amber-800 dark:text-amber-300">
-              If you don't see the email, check your spam folder. The email is sent from Supabase.
+              If you don't see the email, check your spam folder. The email is
+              sent from Supabase.
             </p>
           </div>
         </div>
@@ -127,12 +148,16 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ setAuthM
     <form onSubmit={handleSubmit} className="space-y-6 px-8 pb-8">
       <div className="text-center space-y-2 mb-2">
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          Enter the email address associated with your account and we'll send you a link to reset your password.
+          Enter the email address associated with your account and we'll send
+          you a link to reset your password.
         </p>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="forgot-email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <Label
+          htmlFor="forgot-email"
+          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+        >
           Email address
         </Label>
         <div className="relative group">

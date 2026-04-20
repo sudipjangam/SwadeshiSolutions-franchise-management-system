@@ -1,0 +1,41 @@
+id,name,description,is_deletable,restaurant_id,created_at,updated_at,is_system,has_full_access
+0dc674b0-e97c-4137-8062-f6e3ba3ca867,manager,,true,288d2eb0-18d1-4a18-8916-a7c3dc176fc5,2025-10-23 04:40:05.201118+00,2026-01-02 04:50:22.651794+00,false,false
+15eeaa62-9794-44f9-8a9e-aa5f22ed0a54,Custom Access for Service Account (1697),Individual permissions for Service Account,true,978363fe-e1ba-4e66-980d-5d6b99199fb7,2025-12-25 06:46:32.725739+00,2026-02-24 02:53:15.791362+00,false,false
+24796314-236d-4c74-8807-4477a409ea53,Viewer,Dashboard view only (restricted),false,ec68fdf9-3f76-4980-8e83-56dfec2951a4,2026-03-14 11:05:42.694573+00,2026-03-14 11:05:42.694573+00,true,false
+28b8c012-8745-411d-9fb2-89a644d152a1,Manager,All operations except financial reports,false,978363fe-e1ba-4e66-980d-5d6b99199fb7,2025-12-27 15:01:18.908504+00,2026-02-24 02:52:00.028762+00,true,false
+34d9c24c-1477-4032-a39c-072f08a75533,staff,"Operational access only (POS, Orders, Kitchen, etc.)",true,288d2eb0-18d1-4a18-8916-a7c3dc176fc5,2025-10-23 04:40:05.201118+00,2026-01-02 04:49:55.392922+00,false,false
+35341481-a037-4706-a433-433d0b2a48b3,Staff,Basic operational access,false,288d2eb0-18d1-4a18-8916-a7c3dc176fc5,2025-12-27 15:01:18.908504+00,2026-04-09 01:03:36.902034+00,true,true
+38866666-2e31-4c2e-9755-6c4de4aa7b86,Viewer,Dashboard view only (restricted),false,288d2eb0-18d1-4a18-8916-a7c3dc176fc5,2025-12-27 15:01:18.908504+00,2025-12-27 15:01:18.908504+00,true,false
+38ed048e-519c-4114-abec-a186a11c0348,Custom Access for Harshal Kolhe (0237),Individual permissions for Harshal Kolhe,true,288d2eb0-18d1-4a18-8916-a7c3dc176fc5,2025-12-20 16:41:44.086946+00,2026-01-02 04:49:39.026613+00,false,false
+3c138a0e-4851-4e9a-950b-9467f5686672,Chef,"Kitchen, orders, inventory, and menu management",false,a89cea4a-c063-4d5f-8e6b-232399ffb0e5,2026-02-24 11:03:18.840026+00,2026-03-15 08:26:55.685794+00,true,false
+4271b457-32f5-40cb-a6d7-69741cbbcc6d,admin,Administrative access to all features,false,288d2eb0-18d1-4a18-8916-a7c3dc176fc5,2025-10-23 04:40:05.201118+00,2025-12-17 07:19:39.710329+00,true,true
+4442bcf4-1967-4c3a-ba95-7028d7ed69e5,Owner,Restaurant owner with full control,false,ec68fdf9-3f76-4980-8e83-56dfec2951a4,2026-03-14 11:05:42.694573+00,2026-03-14 11:05:42.694573+00,true,true
+46e485aa-46a1-45e6-a679-7294add80294,Viewer,Dashboard view only (restricted),false,a89cea4a-c063-4d5f-8e6b-232399ffb0e5,2026-02-24 11:03:18.840026+00,2026-02-24 11:03:18.840026+00,true,false
+49abc16b-839d-4f5c-a527-a88462e78ede,Waiter,"Orders, POS, tables, reservations",false,a89cea4a-c063-4d5f-8e6b-232399ffb0e5,2026-02-24 11:03:18.840026+00,2026-02-24 11:03:18.840026+00,true,false
+56d12cbb-d08c-47a6-8c2a-b606f9e42fe6,Staff,Basic operational access,false,ec68fdf9-3f76-4980-8e83-56dfec2951a4,2026-03-14 11:05:42.694573+00,2026-04-11 15:59:20.852125+00,true,false
+5b79c6cd-b22f-4aae-92d4-5b4b4b30bb58,Admin,Full system access (superuser),false,978363fe-e1ba-4e66-980d-5d6b99199fb7,2025-12-17 07:19:39.710329+00,2026-01-26 07:15:13.558965+00,true,true
+5d2ee7c8-fef8-4236-81db-0b08b93c410c,Staff,Individual permissions for Staff test,false,978363fe-e1ba-4e66-980d-5d6b99199fb7,2025-12-17 06:58:38.150969+00,2026-04-11 15:58:29.408154+00,true,false
+612e78b2-b954-4a92-9307-323682f0d179,chef,,true,288d2eb0-18d1-4a18-8916-a7c3dc176fc5,2025-10-23 04:40:05.201118+00,2025-10-27 00:38:12.503317+00,false,false
+71f7111b-31ac-4e20-aba0-0149d97641fa,Custom Access for Deepali Junghare (2306),Individual permissions for Deepali Junghare,true,a89cea4a-c063-4d5f-8e6b-232399ffb0e5,2026-03-16 06:04:03.366434+00,2026-03-16 06:04:03.366434+00,false,false
+72c062ee-65bb-47a8-b4b2-a86bdb064332,Custom Access for Pratik Wadkar (3153),Individual permissions for Pratik Wadkar,true,288d2eb0-18d1-4a18-8916-a7c3dc176fc5,2025-12-31 12:11:37.326478+00,2026-01-02 04:49:24.197323+00,false,false
+78f4e29a-8345-4249-9b8b-cd60ac3388ee,Owner,Restaurant owner with full control,false,978363fe-e1ba-4e66-980d-5d6b99199fb7,2025-12-17 07:19:39.710329+00,2025-12-27 15:01:18.908504+00,true,true
+7ceffeef-1474-4f49-b6ee-2f890a0dffc9,Chef,"Kitchen, orders, inventory, and menu management",false,288d2eb0-18d1-4a18-8916-a7c3dc176fc5,2025-12-27 15:01:18.908504+00,2025-12-27 15:01:18.908504+00,true,false
+8c62465f-ea64-4009-a837-80afd1d733ec,Owner,Restaurant owner with full control,false,288d2eb0-18d1-4a18-8916-a7c3dc176fc5,2025-10-21 10:39:38.334254+00,2025-12-27 15:01:18.908504+00,true,true
+8d756de3-4f08-407b-979f-7e1ea660ed54,Waiter,"Orders, POS, tables, reservations",false,978363fe-e1ba-4e66-980d-5d6b99199fb7,2025-12-27 15:01:18.908504+00,2025-12-27 15:01:18.908504+00,true,false
+8f65a36e-2fd2-4aa4-9f3b-abff6428bf0d,Admin,Full system access (superuser),false,ec68fdf9-3f76-4980-8e83-56dfec2951a4,2026-03-14 11:05:42.694573+00,2026-03-14 11:05:42.694573+00,true,true
+8f6ab530-5a92-4f3f-bbbd-d2ff50443831,Manager,All operations except financial reports,false,288d2eb0-18d1-4a18-8916-a7c3dc176fc5,2025-12-27 15:01:18.908504+00,2026-01-02 04:49:07.51815+00,true,false
+8feb477f-68b0-4945-9c64-21a8f1ee6bdd,Manager,All operations except financial reports,false,a89cea4a-c063-4d5f-8e6b-232399ffb0e5,2026-02-24 11:03:18.840026+00,2026-03-11 17:40:42.670486+00,true,false
+9fe13b80-92aa-463d-9137-84086a539087,Manager,All operations except financial reports,false,ec68fdf9-3f76-4980-8e83-56dfec2951a4,2026-03-14 11:05:42.694573+00,2026-03-24 08:02:22.326083+00,true,false
+aa140faf-18f9-460d-a09a-235cdbbbdbec,Staff,Basic operational access,false,a89cea4a-c063-4d5f-8e6b-232399ffb0e5,2026-02-24 11:03:18.840026+00,2026-02-24 11:03:18.840026+00,true,false
+b6fa6cca-376e-4de6-8f02-920daaa84dc0,Front Desk,test,true,978363fe-e1ba-4e66-980d-5d6b99199fb7,2025-12-15 05:40:29.552361+00,2025-12-15 05:40:29.552361+00,false,false
+c18e5161-a645-4b71-8959-8cc3e480ec90,Admin,Full system access (superuser),false,a89cea4a-c063-4d5f-8e6b-232399ffb0e5,2026-02-24 11:03:18.840026+00,2026-02-24 11:03:18.840026+00,true,true
+c7585e71-7079-4f77-bc86-1882f242845e,Waiter,"Orders, POS, tables, reservations",false,288d2eb0-18d1-4a18-8916-a7c3dc176fc5,2025-12-27 15:01:18.908504+00,2025-12-27 15:01:18.908504+00,true,false
+cec3a5a6-e871-4c7f-8b21-ba8fa783450b,Owner,Restaurant owner with full control,false,a89cea4a-c063-4d5f-8e6b-232399ffb0e5,2026-02-24 11:03:18.840026+00,2026-02-24 11:03:18.840026+00,true,true
+d89e9cec-9a5a-42bb-a837-e9cfcc2c02b8,Digital marketing executive,"The Digital Marketing Executive is responsible for planning, creating, and managing online content to grow the brand, increase engagement, and drive customers through digital platforms, especially Instagram.",true,ec68fdf9-3f76-4980-8e83-56dfec2951a4,2026-03-24 08:58:56.976951+00,2026-03-24 08:58:56.976951+00,false,false
+df2e1e5e-fb4b-48af-aa46-139292049456,Chef,"Kitchen, orders, inventory, and menu management",false,ec68fdf9-3f76-4980-8e83-56dfec2951a4,2026-03-14 11:05:42.694573+00,2026-03-24 08:38:15.078717+00,true,false
+e92be2b1-b9b7-414e-8a6a-0a5afc3c9e85,Admin,Full system access (superuser),false,288d2eb0-18d1-4a18-8916-a7c3dc176fc5,2025-12-27 15:01:18.908504+00,2025-12-27 15:01:18.908504+00,true,true
+ee412415-22ba-4c08-9946-6065be19942b,Chef,"Kitchen, orders, inventory, and menu management",false,978363fe-e1ba-4e66-980d-5d6b99199fb7,2025-12-27 15:01:18.908504+00,2025-12-27 15:01:18.908504+00,true,false
+f1b57645-3627-43a4-b5e0-c5e98139331a,Housekeeper,housekeeping access only,true,288d2eb0-18d1-4a18-8916-a7c3dc176fc5,2025-10-23 04:22:56.175628+00,2025-10-23 04:22:56.175628+00,false,false
+f1e7ad1d-22f0-4a7a-8e75-3fab2847babf,Viewer,Dashboard view only (restricted),false,978363fe-e1ba-4e66-980d-5d6b99199fb7,2025-12-27 15:01:18.908504+00,2025-12-27 15:01:18.908504+00,true,false
+f6d08435-1fac-4c41-bf2a-a24d49840645,Custom Access for Staff test (7394),Individual permissions for Staff test,true,978363fe-e1ba-4e66-980d-5d6b99199fb7,2025-12-17 08:31:48.639646+00,2026-02-24 02:53:29.01321+00,false,false
+ffc25925-48e3-4591-94e1-6684dde31101,Waiter,"Orders, POS, tables, reservations",false,ec68fdf9-3f76-4980-8e83-56dfec2951a4,2026-03-14 11:05:42.694573+00,2026-03-14 11:05:42.694573+00,true,false

@@ -146,17 +146,20 @@ export const hasFeatureAccess = (featureKey: string, planFeatures: string[]): bo
   // 1. Exact match
   if (normalizedPlan.includes(normalizedKey)) return true;
 
-  // 2. Wildcard match — walk up the hierarchy
-  // e.g., for 'reports.default.staff', check:
-  //   'reports.default.*' → 'reports.*'
+  // 2. Wildcard DOWN: plan has 'reports.*' → grants 'reports.default.staff'
   const segments = normalizedKey.split('.');
   for (let i = segments.length - 1; i >= 1; i--) {
     const wildcardKey = segments.slice(0, i).join('.') + '.*';
     if (normalizedPlan.includes(wildcardKey)) return true;
   }
 
-  // 3. Legacy flat-key fallback (e.g. if DB has 'reports' instead of 'reports.*')
-  // This ensures live users aren't locked out before the migration script runs.
+  // 3. Reverse wildcard UP: sidebar checks 'dashboard' → plan has 'dashboard.basic'
+  // If featureKey is a root key (no dot), grant if ANY plan key starts with 'featureKey.'
+  if (!normalizedKey.includes('.')) {
+    if (normalizedPlan.some(planKey => planKey.startsWith(normalizedKey + '.'))) return true;
+  }
+
+  // 4. Legacy flat-key fallback (e.g. if DB has 'reports' instead of 'reports.*')
   const rootKey = segments[0];
   if (normalizedPlan.includes(rootKey)) return true;
   
@@ -164,7 +167,6 @@ export const hasFeatureAccess = (featureKey: string, planFeatures: string[]): bo
   if (rootKey === 'users_permissions') {
     if (normalizedPlan.includes('user-management') || normalizedPlan.includes('permission-management')) return true;
   }
-  // qsr-pos is independent of quickserve — no legacy fallback needed
 
   return false;
 };

@@ -5,7 +5,7 @@
 
 [[redirects]]
   from = "/api/supabase/*"
-  to = "https://clmsoetktmvhazctlans.supabase.co/:splat"
+  to = "https://bpheiklhiwwcrugmxivp.supabase.co/:splat"
   status = 200
   force = true
 

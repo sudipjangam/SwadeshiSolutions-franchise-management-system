@@ -1,0 +1,30 @@
+id,name,description,created_at
+0fc269f1-a889-477c-8901-fb0cdc728796,Customers,Customer relationship management,2025-10-21 10:19:24.076072+00
+19cdfcce-e594-4976-98f2-8236b3948c05,Channel Management,Revenue channel management,2025-10-21 10:19:24.076072+00
+1d849f37-4576-4c99-93e1-112ec5d8b3f7,Inventory,Inventory tracking,2025-10-21 10:19:24.076072+00
+25846898-6117-4a4f-ad97-9c7b0d1a4443,QSR POS,Quick Service Restaurant POS,2025-10-21 10:19:24.076072+00
+2ec305c7-d1ed-47e9-9e28-9cec2bb821d3,Gate Services,Standard entry/exit logging,2026-04-11 10:14:52.371054+00
+30659136-b9fe-4561-a563-afda95a6f13e,User Management,User administration,2025-10-21 10:19:24.076072+00
+333b1147-b58e-4f6d-bdc4-588426041be7,Expenses,Expense tracking,2025-10-21 10:19:24.076072+00
+3398b329-4780-4318-806c-d18df203a0a5,Recipes,Recipe management,2025-10-21 10:19:24.076072+00
+3d3dca32-7e61-41c3-bb97-69b20b260ec6,Analytics,Advanced analytics,2025-10-21 10:19:24.076072+00
+44830c12-8fda-414f-916f-cbd014a90473,Dashboard,Main dashboard with stats and overview,2025-10-21 10:19:24.076072+00
+4ba133ff-66e0-4b5e-a21b-db1cad07a6e5,POS,Point of Sale system,2025-10-21 10:19:24.076072+00
+4bfa4501-a6cf-4946-99bf-646dfd07bd84,Tables,Table management,2025-10-21 10:19:24.076072+00
+5786c110-eea1-40b8-a31b-3c826c0d9482,Security,Security settings,2025-10-21 10:19:24.076072+00
+62e3f9bd-aa19-4c67-93c3-2945fb0a5a71,QuickServe POS,Core quick serve POS,2026-04-11 10:14:52.371054+00
+6f80d159-bf27-45b9-b7e2-da4ee088fc88,Role Management,Role and permissions management,2025-10-21 10:19:24.076072+00
+73cedbd7-1704-4649-a591-c08ba782e774,Kitchen,Kitchen display system,2025-10-21 10:19:24.076072+00
+7f729eb3-808d-4622-9a39-280d5cca44d0,Menu,Menu management,2025-10-21 10:19:24.076072+00
+82817bd7-d872-4df6-bb45-2734a3c52c31,Marketing,Marketing campaigns,2025-10-21 10:19:24.076072+00
+84a28635-d2f6-403b-8495-601b54d5397a,Settings,System settings,2025-10-21 10:19:24.076072+00
+8d6ae566-698c-49e4-a53a-a8bcdc02602c,Suppliers,Supplier management,2025-10-21 10:19:24.076072+00
+92766f96-2c64-4b29-8331-89deadf43b8b,Orders,Order management,2025-10-21 10:19:24.076072+00
+966a9b76-67a5-42e2-9f8c-5bc070f73f32,Housekeeping,Housekeeping operations,2025-10-21 10:19:24.076072+00
+a1e2adb3-0f7e-4292-a27a-275d791346fe,Staff,Staff management,2025-10-21 10:19:24.076072+00
+a543bdd7-5314-4ebb-94ba-6b219c7c8a5e,NC-Orders,non chargeable orders,2026-01-26 06:45:14.644516+00
+a80ebf9b-8f35-4610-b774-4dfb8a086a82,Rooms,Room management,2025-10-21 10:19:24.076072+00
+b2a43556-0d2a-49d4-a8b0-258d1ce90b9a,Financial,Financial management,2025-10-21 10:19:24.076072+00
+c416534b-2b44-4d43-9a0f-d4ab728964ec,Reservations,Reservation system,2025-10-21 10:19:24.076072+00
+fba44b91-41a1-4417-bb52-f3ee3f609b5a,Reports,Dedicated Business Insights dashboard,2026-04-11 10:14:52.371054+00
+fde341c8-e0b1-4b88-9c5f-7c9251016e2b,AI Assistant,AI-powered assistant,2025-10-21 10:19:24.076072+00

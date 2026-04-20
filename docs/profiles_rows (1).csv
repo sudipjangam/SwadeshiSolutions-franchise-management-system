@@ -1,0 +1,2 @@
+id,first_name,last_name,role,restaurant_id,created_at,updated_at,role_id,role_name_text,email,phone
+6a1a5703-999f-45b7-a7bd-ff7ff12ba11d,Sudip,Jangam,admin,978363fe-e1ba-4e66-980d-5d6b99199fb7,2025-10-18 13:32:34+00,2025-10-18 13:33:25.260693+00,5b79c6cd-b22f-4aae-92d4-5b4b4b30bb58,admin,jangamsudip@gmail.com,

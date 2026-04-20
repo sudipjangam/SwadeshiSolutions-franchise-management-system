@@ -91,6 +91,33 @@ const PlatformAnalytics = lazy(
 const AdminTemplateReview = lazy(
   () => import("@/components/Platform/AdminTemplateReview"),
 );
+const FranchiseManagement = lazy(
+  () => import("@/pages/Platform/FranchiseManagement"),
+);
+const FranchiseDetail = lazy(
+  () => import("@/pages/Platform/FranchiseDetail"),
+);
+const FranchiseDashboard = lazy(
+  () => import("@/pages/Franchise/FranchiseDashboard"),
+);
+const FranchiseLayout = lazy(
+  () => import("@/pages/Franchise/FranchiseLayout"),
+);
+const BranchManagement = lazy(
+  () => import("@/pages/Franchise/BranchManagement"),
+);
+const MenuSync = lazy(
+  () => import("@/pages/Franchise/MenuSync"),
+);
+const CrossBranchOrders = lazy(
+  () => import("@/pages/Franchise/CrossBranchOrders"),
+);
+const CrossBranchPnL = lazy(
+  () => import("@/pages/Franchise/CrossBranchPnL"),
+);
+const FranchiseSettings = lazy(
+  () => import("@/pages/Franchise/FranchiseSettings"),
+);
 const DailySummaryHistory = lazy(() => import("@/pages/DailySummaryHistory"));
 
 // ============================================================================
@@ -466,6 +493,23 @@ export const AppRoutes = () => {
             }
           />
 
+          {/* Franchise — multi-branch org owner/admin */}
+          <Route
+            path="/franchise"
+            element={
+              <LazyRoute>
+                <FranchiseLayout />
+              </LazyRoute>
+            }
+          >
+            <Route index element={<LazyRoute><FranchiseDashboard /></LazyRoute>} />
+            <Route path="branches" element={<LazyRoute><BranchManagement /></LazyRoute>} />
+            <Route path="menu-sync" element={<LazyRoute><MenuSync /></LazyRoute>} />
+            <Route path="orders" element={<LazyRoute><CrossBranchOrders /></LazyRoute>} />
+            <Route path="pnl" element={<LazyRoute><CrossBranchPnL /></LazyRoute>} />
+            <Route path="settings" element={<LazyRoute><FranchiseSettings /></LazyRoute>} />
+          </Route>
+
           {/* Dev Tools - Admin only */}
           <Route
             path="/email-tester"
@@ -479,6 +523,7 @@ export const AppRoutes = () => {
               </AdminRoleGuard>
             }
           />
+
 
           <Route
             path="/platform"
@@ -543,6 +588,22 @@ export const AppRoutes = () => {
               element={
                 <LazyRoute>
                   <AdminTemplateReview />
+                </LazyRoute>
+              }
+            />
+            <Route
+              path="franchises"
+              element={
+                <LazyRoute>
+                  <FranchiseManagement />
+                </LazyRoute>
+              }
+            />
+            <Route
+              path="franchises/:id"
+              element={
+                <LazyRoute>
+                  <FranchiseDetail />
                 </LazyRoute>
               }
             />

@@ -266,7 +266,9 @@ const PlatformDashboard = () => {
               </div>
             ) : (
               recentRestaurants.map((restaurant: any) => {
-                const subscription = restaurant.restaurant_subscriptions;
+                const subscription = Array.isArray(restaurant.restaurant_subscriptions)
+                  ? restaurant.restaurant_subscriptions[0]
+                  : restaurant.restaurant_subscriptions;
                 const status = subscription?.status || "none";
 
                 return (
@@ -322,7 +324,7 @@ const PlatformDashboard = () => {
                       {status !== "active" && status !== "trial" && (
                         <AlertTriangle className="h-3 w-3 mr-1.5" />
                       )}
-                      {status.charAt(0).toUpperCase() + status.slice(1)}
+                      {status ? status.charAt(0).toUpperCase() + status.slice(1) : "None"}
                     </Badge>
                   </div>
                 );

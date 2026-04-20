@@ -1,7 +1,7 @@
 -- ============================================================================
 -- MIGRATION: Fix Critical RLS Policy Vulnerabilities
 -- Date: 2026-02-25
--- Applied to: clmsoetktmvhazctlans
+-- Applied to: bpheiklhiwwcrugmxivp
 -- ============================================================================
 
 -- CRIT-1: Drop broken restaurant_access policies (self-join bug)

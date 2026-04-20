@@ -17,6 +17,7 @@ import {
   Menu,
   X,
   Shield,
+  GitBranch,
 } from "lucide-react";
 
 interface NavItem {
@@ -38,6 +39,12 @@ const navItems: NavItem[] = [
     href: "/platform/restaurants",
     icon: Building2,
     description: "Manage all restaurants",
+  },
+  {
+    title: "Franchises",
+    href: "/platform/franchises",
+    icon: GitBranch,
+    description: "Franchise onboarding",
   },
   {
     title: "Subscriptions",

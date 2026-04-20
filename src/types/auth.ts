@@ -255,3 +255,79 @@ export interface RestaurantSubscription {
   created_at: string;
   updated_at: string;
 }
+
+// ============================================================
+// Franchise / Organization Types
+// ============================================================
+
+export type OrgType = 'single' | 'franchise' | 'chain';
+export type OrgMenuMode = 'shared' | 'independent' | 'hybrid';
+export type OrgMemberRole = 'owner' | 'admin' | 'manager' | 'member' | 'viewer';
+export type OrgSubPlan = 'free' | 'starter' | 'professional' | 'enterprise';
+export type OrgSubStatus = 'active' | 'inactive' | 'trial' | 'cancelled';
+export type MenuItemOrigin = 'master' | 'branch' | 'inherited';
+
+export interface Organization {
+  id: string;
+  name: string;
+  slug?: string;
+  type: OrgType;
+  owner_user_id?: string;
+  logo_url?: string;
+  menu_mode: OrgMenuMode;
+  settings: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrganizationMember {
+  id: string;
+  organization_id: string;
+  user_id: string;
+  role: OrgMemberRole;
+  accessible_branches?: string[] | null; // null = all branches
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrganizationSubscription {
+  id: string;
+  organization_id: string;
+  plan_type: OrgSubPlan;
+  max_branches: number; // -1 = unlimited
+  base_price: number;
+  per_branch_price: number;
+  status: OrgSubStatus;
+  trial_ends_at?: string;
+  current_period_start: string;
+  current_period_end?: string;
+  features: string[];
+  razorpay_subscription_id?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Branch {
+  id: string;
+  name: string;
+  branch_code?: string;
+  is_headquarters: boolean;
+  organization_id: string;
+  address?: string;
+  phone?: string;
+  logo_url?: string;
+  is_active?: boolean;
+}
+
+export interface OrganizationContextType {
+  organization: Organization | null;
+  branches: Branch[];
+  currentBranch: string | 'all'; // restaurant_id or 'all'
+  switchBranch: (branchId: string | 'all') => void;
+  isMultiBranch: boolean;
+  orgRole: OrgMemberRole | null;
+  menuMode: OrgMenuMode;
+  orgSubscription: OrganizationSubscription | null;
+  isLoading: boolean;
+}
+

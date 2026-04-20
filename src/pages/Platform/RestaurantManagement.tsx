@@ -122,8 +122,8 @@ interface Restaurant {
   payment_gateway_enabled: boolean | null;
   created_at: string;
   updated_at: string | null;
-  // Supabase returns object for one-to-one, array for one-to-many
-  restaurant_subscriptions: {
+  // Supabase returns array for one-to-many relationships (FK exists)
+  restaurant_subscriptions: Array<{
     id: string;
     status: string;
     current_period_end: string;
@@ -133,7 +133,7 @@ interface Restaurant {
       name: string;
       price: number;
     } | null;
-  } | null;
+  }>;
   profiles: Array<{
     id: string;
     first_name: string | null;
@@ -294,7 +294,9 @@ const RestaurantManagement = () => {
       let filtered = data || [];
       if (statusFilter !== "all") {
         filtered = filtered.filter((r: any) => {
-          const sub = r.restaurant_subscriptions;
+          const sub = Array.isArray(r.restaurant_subscriptions)
+            ? r.restaurant_subscriptions[0]
+            : r.restaurant_subscriptions;
           return sub?.status === statusFilter;
         });
       }
@@ -700,12 +702,13 @@ const RestaurantManagement = () => {
     setSelectedRestaurant(restaurant);
     setFormData({
       ...formData,
-      planId: restaurant.restaurant_subscriptions?.[0]?.plan_id || "",
+      planId: (Array.isArray(restaurant.restaurant_subscriptions) ? restaurant.restaurant_subscriptions[0] : restaurant.restaurant_subscriptions)?.plan_id || "",
     });
     setIsSubscriptionOpen(true);
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string | undefined | null) => {
+    if (!status) status = "none";
     const styles = {
       active:
         "border-emerald-300 text-emerald-700 bg-emerald-50 dark:border-emerald-500/50 dark:text-emerald-400 dark:bg-emerald-500/10",
@@ -824,7 +827,9 @@ const RestaurantManagement = () => {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {restaurants.map((restaurant, index) => {
-            const sub = restaurant.restaurant_subscriptions;
+            const sub = Array.isArray(restaurant.restaurant_subscriptions)
+              ? restaurant.restaurant_subscriptions[0]
+              : restaurant.restaurant_subscriptions;
             const userCount = restaurant.profiles?.length || 0;
             const expiry = sub?.current_period_end
               ? new Date(sub.current_period_end).toLocaleDateString()
@@ -2113,44 +2118,37 @@ const RestaurantManagement = () => {
                 </div>
 
                 {/* Subscription */}
-                {selectedRestaurant?.restaurant_subscriptions && (
-                  <div className="border-t pt-4">
-                    <h4 className="font-medium flex items-center gap-2 mb-3">
-                      <CreditCard className="h-4 w-4 text-emerald-500" />
-                      Subscription
-                    </h4>
-                    <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <span className="font-medium text-lg">
-                            {
-                              selectedRestaurant.restaurant_subscriptions
-                                .subscription_plans?.name
-                            }
-                          </span>
-                          <p className="text-sm text-slate-500">
-                            ₹
-                            {
-                              selectedRestaurant.restaurant_subscriptions
-                                .subscription_plans?.price
-                            }
-                            /month
-                          </p>
+                {selectedRestaurant?.restaurant_subscriptions && (() => {
+                  const activeSub = Array.isArray(selectedRestaurant.restaurant_subscriptions)
+                    ? selectedRestaurant.restaurant_subscriptions[0]
+                    : selectedRestaurant.restaurant_subscriptions;
+                  if (!activeSub) return null;
+                  return (
+                    <div className="border-t pt-4">
+                      <h4 className="font-medium flex items-center gap-2 mb-3">
+                        <CreditCard className="h-4 w-4 text-emerald-500" />
+                        Subscription
+                      </h4>
+                      <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <span className="font-medium text-lg">
+                              {activeSub.subscription_plans?.name}
+                            </span>
+                            <p className="text-sm text-slate-500">
+                              ₹{activeSub.subscription_plans?.price}/month
+                            </p>
+                          </div>
+                          {getStatusBadge(activeSub.status)}
                         </div>
-                        {getStatusBadge(
-                          selectedRestaurant.restaurant_subscriptions.status,
-                        )}
+                        <p className="text-sm text-slate-500 mt-2">
+                          Expires:{" "}
+                          {new Date(activeSub.current_period_end).toLocaleDateString()}
+                        </p>
                       </div>
-                      <p className="text-sm text-slate-500 mt-2">
-                        Expires:{" "}
-                        {new Date(
-                          selectedRestaurant.restaurant_subscriptions
-                            .current_period_end,
-                        ).toLocaleDateString()}
-                      </p>
                     </div>
-                  </div>
-                )}
+                  );
+                })()}
               </TabsContent>
 
               {/* Owner Tab */}
@@ -2418,7 +2416,7 @@ const RestaurantManagement = () => {
                     restaurantId: selectedRestaurant.id,
                     planId: formData.planId,
                     existingSubId:
-                      selectedRestaurant.restaurant_subscriptions?.id,
+                      (Array.isArray(selectedRestaurant.restaurant_subscriptions) ? selectedRestaurant.restaurant_subscriptions[0] : selectedRestaurant.restaurant_subscriptions)?.id,
                   });
                 }
               }}
