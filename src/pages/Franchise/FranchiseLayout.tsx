@@ -6,13 +6,17 @@ import { cn } from '@/lib/utils';
 import {
   LayoutDashboard, Store, RefreshCw, ShoppingBag,
   TrendingUp, Settings, ArrowLeft, GitBranch, Loader2,
+  Users, Package, UserCheck,
 } from 'lucide-react';
 
 const navItems = [
   { title: 'Dashboard', href: '/franchise', icon: LayoutDashboard },
   { title: 'Branches', href: '/franchise/branches', icon: Store },
+  { title: 'Team', href: '/franchise/team', icon: Users },
   { title: 'Menu Sync', href: '/franchise/menu-sync', icon: RefreshCw },
   { title: 'Orders', href: '/franchise/orders', icon: ShoppingBag },
+  { title: 'Inventory', href: '/franchise/inventory', icon: Package },
+  { title: 'Staff', href: '/franchise/staff', icon: UserCheck },
   { title: 'P&L', href: '/franchise/pnl', icon: TrendingUp },
   { title: 'Settings', href: '/franchise/settings', icon: Settings },
 ];

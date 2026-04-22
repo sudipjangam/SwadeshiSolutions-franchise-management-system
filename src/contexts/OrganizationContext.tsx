@@ -33,29 +33,53 @@ export const OrganizationProvider = ({ children }: OrganizationProviderProps) =>
   });
 
   // Fetch user's organization and membership
+  // Handles users who belong to multiple orgs — prefers franchise/chain over single
   const { data: orgData, isLoading: orgLoading } = useQuery({
     queryKey: ['organization', user?.id],
     queryFn: async () => {
       if (!user?.id) return null;
 
-      const { data: member, error: memberErr } = await supabase
+      const { data: members, error: memberErr } = await supabase
         .from('organization_members')
         .select(`
           role,
           accessible_branches,
+          organization_id,
           organizations (
             id, name, slug, type, owner_user_id, logo_url, menu_mode, settings, created_at, updated_at
           )
         `)
-        .eq('user_id', user.id)
-        .single();
+        .eq('user_id', user.id);
 
-      if (memberErr || !member) return null;
+      if (memberErr || !members || members.length === 0) return null;
+
+      // Pick best org: prefer franchise/chain, then match profile restaurant, then first
+      let best = members[0];
+      for (const m of members) {
+        const org = m.organizations as Organization;
+        if (!org) continue;
+        // Prefer franchise or chain type over single
+        if (org.type === 'franchise' || org.type === 'chain') {
+          best = m;
+          break;
+        }
+        // Or match the user's profile restaurant
+        if (user.restaurant_id) {
+          const { count } = await supabase
+            .from('restaurants')
+            .select('id', { count: 'exact', head: true })
+            .eq('organization_id', org.id)
+            .eq('id', user.restaurant_id);
+          if (count && count > 0) {
+            best = m;
+          }
+        }
+      }
 
       return {
-        organization: member.organizations as Organization,
-        orgRole: member.role as OrgMemberRole,
-        accessibleBranches: member.accessible_branches as string[] | null,
+        organization: best.organizations as Organization,
+        orgRole: best.role as OrgMemberRole,
+        accessibleBranches: best.accessible_branches as string[] | null,
       };
     },
     enabled: !!user?.id,

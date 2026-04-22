@@ -8,6 +8,7 @@ import { MobileNavigation } from "@/components/ui/mobile-navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { PageLoader } from "@/components/ui/page-loader";
 import { PermissionGuard } from "./PermissionGuard";
+import { FranchiseGuard } from "./FranchiseGuard";
 
 // ============================================================================
 // LAZY LOADED PAGES - Each page is now a separate chunk
@@ -117,6 +118,15 @@ const CrossBranchPnL = lazy(
 );
 const FranchiseSettings = lazy(
   () => import("@/pages/Franchise/FranchiseSettings"),
+);
+const TeamManagement = lazy(
+  () => import("@/pages/Franchise/TeamManagement"),
+);
+const CrossBranchInventory = lazy(
+  () => import("@/pages/Franchise/CrossBranchInventory"),
+);
+const CrossBranchStaff = lazy(
+  () => import("@/pages/Franchise/CrossBranchStaff"),
 );
 const DailySummaryHistory = lazy(() => import("@/pages/DailySummaryHistory"));
 
@@ -497,15 +507,20 @@ export const AppRoutes = () => {
           <Route
             path="/franchise"
             element={
-              <LazyRoute>
-                <FranchiseLayout />
-              </LazyRoute>
+              <FranchiseGuard>
+                <LazyRoute>
+                  <FranchiseLayout />
+                </LazyRoute>
+              </FranchiseGuard>
             }
           >
             <Route index element={<LazyRoute><FranchiseDashboard /></LazyRoute>} />
             <Route path="branches" element={<LazyRoute><BranchManagement /></LazyRoute>} />
+            <Route path="team" element={<LazyRoute><TeamManagement /></LazyRoute>} />
             <Route path="menu-sync" element={<LazyRoute><MenuSync /></LazyRoute>} />
             <Route path="orders" element={<LazyRoute><CrossBranchOrders /></LazyRoute>} />
+            <Route path="inventory" element={<LazyRoute><CrossBranchInventory /></LazyRoute>} />
+            <Route path="staff" element={<LazyRoute><CrossBranchStaff /></LazyRoute>} />
             <Route path="pnl" element={<LazyRoute><CrossBranchPnL /></LazyRoute>} />
             <Route path="settings" element={<LazyRoute><FranchiseSettings /></LazyRoute>} />
           </Route>
