@@ -298,7 +298,7 @@ const FranchiseDashboard = () => {
                 />
                 <Legend formatter={v => v === 'revenue' ? 'Revenue' : 'Orders'} />
                 <Bar dataKey="revenue" fill="#6366f1" radius={[6, 6, 0, 0]} name="revenue" />
-                <Bar dataKey="orders" fill="#10b981" radius={[6, 6, 0, 0]} name="orders" yAxisId={1} hide />
+                <Bar dataKey="orders" fill="#10b981" radius={[6, 6, 0, 0]} name="orders" hide />
               </BarChart>
             </ResponsiveContainer>
           </div>
