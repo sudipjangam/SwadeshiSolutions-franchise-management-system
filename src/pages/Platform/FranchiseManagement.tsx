@@ -21,6 +21,9 @@ import {
   CreditCard,
   Globe,
   Megaphone,
+  Lock,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 import type { Organization, Branch, OrganizationSubscription } from '@/types/auth';
 
@@ -62,7 +65,17 @@ const CreateFranchiseWizard = ({ onClose, onSuccess }: { onClose: () => void; on
     first_name: '',
     last_name: '',
     phone: '',
+    password: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Auto-generate password when name changes: FirstName@LastName
+  const generateDefaultPassword = (first: string, last: string) => {
+    if (first && last) {
+      return `${first.trim()}@${last.trim()}`;
+    }
+    return '';
+  };
 
   const [planData, setPlanData] = useState({
     plan_type: 'starter' as 'free' | 'starter' | 'professional' | 'enterprise',
@@ -81,6 +94,7 @@ const CreateFranchiseWizard = ({ onClose, onSuccess }: { onClose: () => void; on
     setError(null);
 
     try {
+      // Step 1: Create organization + branch + subscription via RPC
       const { data, error } = await supabase.rpc('create_franchise_organization', {
         p_org_name:          orgData.name,
         p_org_slug:          orgData.slug || null,
@@ -99,6 +113,61 @@ const CreateFranchiseWizard = ({ onClose, onSuccess }: { onClose: () => void; on
 
       if (error) throw new Error(error.message);
       if (data && !data.success) throw new Error(data.error || 'Creation failed');
+
+      const orgId = data?.organization_id;
+      const restaurantId = data?.restaurant_id;
+
+      // Step 2: Create owner auth account if email + password provided
+      if (ownerData.email && ownerData.password && orgId && restaurantId) {
+        try {
+          const { data: fnData, error: fnError } = await supabase.functions.invoke('user-management', {
+            body: {
+              action: 'create_user',
+              userData: {
+                email: ownerData.email,
+                password: ownerData.password,
+                first_name: ownerData.first_name || 'Owner',
+                last_name: ownerData.last_name || '',
+                role: 'owner',
+                restaurant_id: restaurantId,
+              },
+            },
+          });
+
+          if (fnError) {
+            console.error('Owner user creation failed:', fnError);
+          } else if (fnData?.success && fnData?.user_id) {
+            // Step 3: Add owner to organization_members
+            await supabase.from('organization_members').upsert({
+              organization_id: orgId,
+              user_id: fnData.user_id,
+              role: 'owner',
+              accessible_branches: null, // owner gets ALL branches
+            }, { onConflict: 'organization_id,user_id' });
+
+            // Step 4: Set owner_user_id on organization
+            await supabase.from('organizations').update({
+              owner_user_id: fnData.user_id,
+              settings: {
+                owner_created: true,
+                owner_email: ownerData.email,
+              },
+            }).eq('id', orgId);
+
+            // Step 5: Update profile with phone if provided
+            if (ownerData.phone) {
+              await supabase.from('profiles').update({
+                phone: ownerData.phone,
+              }).eq('id', fnData.user_id);
+            }
+          } else {
+            console.error('Owner creation returned failure:', fnData);
+          }
+        } catch (e: any) {
+          console.error('Owner creation exception:', e);
+          // Don't block franchise creation — org is already created
+        }
+      }
 
       onSuccess();
     } catch (err: any) {
@@ -219,31 +288,80 @@ const CreateFranchiseWizard = ({ onClose, onSuccess }: { onClose: () => void; on
           {/* Step 2: Owner */}
           {step === 2 && (
             <>
-              <p className="text-xs text-gray-500 bg-amber-500/10 border border-amber-500/20 rounded-lg p-3">
-                Owner will receive an <span className="text-amber-400 font-semibold">invite email</span> to set up their password. They get full edit access to all branches.
-              </p>
+              <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-xl p-4">
+                <h4 className="text-sm font-semibold text-amber-400 flex items-center gap-2 mb-1">
+                  <Lock size={14} /> Owner Login Account
+                </h4>
+                <p className="text-xs text-gray-500">
+                  Set a password so the owner can log in immediately. Default: <span className="text-amber-400 font-mono">FirstName@LastName</span>
+                </p>
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className={labelCls}>First Name</label>
+                  <label className={labelCls}>First Name *</label>
                   <input className={inputCls} placeholder="Rahul" value={ownerData.first_name}
-                    onChange={e => setOwnerData(p => ({ ...p, first_name: e.target.value }))} />
+                    onChange={e => {
+                      const val = e.target.value;
+                      setOwnerData(p => ({
+                        ...p,
+                        first_name: val,
+                        password: p.password === generateDefaultPassword(p.first_name, p.last_name) || !p.password
+                          ? generateDefaultPassword(val, p.last_name)
+                          : p.password,
+                      }));
+                    }} />
                 </div>
                 <div>
-                  <label className={labelCls}>Last Name</label>
+                  <label className={labelCls}>Last Name *</label>
                   <input className={inputCls} placeholder="Sharma" value={ownerData.last_name}
-                    onChange={e => setOwnerData(p => ({ ...p, last_name: e.target.value }))} />
+                    onChange={e => {
+                      const val = e.target.value;
+                      setOwnerData(p => ({
+                        ...p,
+                        last_name: val,
+                        password: p.password === generateDefaultPassword(p.first_name, p.last_name) || !p.password
+                          ? generateDefaultPassword(p.first_name, val)
+                          : p.password,
+                      }));
+                    }} />
                 </div>
               </div>
-              <div>
-                <label className={labelCls}>Email Address *</label>
-                <input type="email" className={inputCls} placeholder="owner@franchise.com" value={ownerData.email}
-                  onChange={e => setOwnerData(p => ({ ...p, email: e.target.value }))} />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className={labelCls}>Email Address (= Login Email) *</label>
+                  <input type="email" className={inputCls} placeholder="owner@franchise.com" value={ownerData.email}
+                    onChange={e => setOwnerData(p => ({ ...p, email: e.target.value }))} />
+                </div>
+                <div>
+                  <label className={labelCls}>Login Password *</label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      className={inputCls}
+                      placeholder="Min 8 characters"
+                      value={ownerData.password}
+                      onChange={e => setOwnerData(p => ({ ...p, password: e.target.value }))}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                </div>
               </div>
               <div>
                 <label className={labelCls}>Phone</label>
                 <input className={inputCls} placeholder="+91 98765 43210" value={ownerData.phone}
                   onChange={e => setOwnerData(p => ({ ...p, phone: e.target.value }))} />
               </div>
+              {ownerData.password && (
+                <p className="text-xs text-emerald-400/80 bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-2.5">
+                  ✅ Owner can login immediately with: <span className="font-mono font-semibold">{ownerData.email || 'email'}</span> / <span className="font-mono font-semibold">{showPassword ? ownerData.password : '••••••••'}</span>
+                </p>
+              )}
             </>
           )}
 
