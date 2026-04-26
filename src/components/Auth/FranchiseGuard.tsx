@@ -8,7 +8,7 @@ import { Loader2 } from 'lucide-react';
  * a multi-branch org member with owner or admin role.
  */
 export const FranchiseGuard = ({ children }: { children: React.ReactNode }) => {
-  const { isMultiBranch, orgRole, isLoading } = useOrganizationContext();
+  const { isMultiBranch, orgRole, isLoading, organization } = useOrganizationContext();
 
   if (isLoading) {
     return (
@@ -18,8 +18,10 @@ export const FranchiseGuard = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  // Must be multi-branch AND owner/admin
-  if (!isMultiBranch || !orgRole || !['owner', 'admin'].includes(orgRole)) {
+  const isFranchiseOrg = organization?.type === 'franchise' || organization?.type === 'chain';
+  const hasAccess = (isMultiBranch || isFranchiseOrg) && !!orgRole && ['owner', 'admin'].includes(orgRole);
+
+  if (!hasAccess) {
     return <Navigate to="/" replace />;
   }
 

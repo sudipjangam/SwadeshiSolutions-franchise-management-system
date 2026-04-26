@@ -128,6 +128,12 @@ const CrossBranchInventory = lazy(
 const CrossBranchStaff = lazy(
   () => import("@/pages/Franchise/CrossBranchStaff"),
 );
+const CommissionDashboard = lazy(
+  () => import("@/pages/Franchise/CommissionDashboard"),
+);
+const BranchMetrics = lazy(
+  () => import("@/pages/Franchise/BranchMetrics"),
+);
 const DailySummaryHistory = lazy(() => import("@/pages/DailySummaryHistory"));
 
 // ============================================================================
@@ -522,6 +528,8 @@ export const AppRoutes = () => {
             <Route path="inventory" element={<LazyRoute><CrossBranchInventory /></LazyRoute>} />
             <Route path="staff" element={<LazyRoute><CrossBranchStaff /></LazyRoute>} />
             <Route path="pnl" element={<LazyRoute><CrossBranchPnL /></LazyRoute>} />
+            <Route path="commissions" element={<LazyRoute><CommissionDashboard /></LazyRoute>} />
+            <Route path="metrics" element={<LazyRoute><BranchMetrics /></LazyRoute>} />
             <Route path="settings" element={<LazyRoute><FranchiseSettings /></LazyRoute>} />
           </Route>
 

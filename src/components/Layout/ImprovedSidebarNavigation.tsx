@@ -349,7 +349,7 @@ export const ImprovedSidebarNavigation = ({
     useSubscriptionAccess();
   const { toast } = useToast();
   const { restaurantName } = useRestaurantId();
-  const { isMultiBranch, orgRole } = useOrganizationContext();
+  const { isMultiBranch, orgRole, organization } = useOrganizationContext();
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
     new Set(["Dashboard", "Operations"]),
   );
@@ -383,9 +383,10 @@ export const ImprovedSidebarNavigation = ({
   const hasPermissionForItem = (item: NavigationItem): boolean => {
     if (!user) return false;
 
-    // Franchise: only show for multi-branch org owner/admin
+    // Franchise: only show for multi-branch org owner/admin or franchise/chain org owner/admin
     if (item.href === '/franchise') {
-      return isMultiBranch && !!orgRole && ['owner', 'admin'].includes(orgRole);
+      const isFranchiseOrg = organization?.type === 'franchise' || organization?.type === 'chain';
+      return (isMultiBranch || isFranchiseOrg) && !!orgRole && ['owner', 'admin'].includes(orgRole);
     }
 
     const componentName = hrefToComponentMap[item.href];

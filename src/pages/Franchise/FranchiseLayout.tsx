@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import {
   LayoutDashboard, Store, RefreshCw, ShoppingBag,
   TrendingUp, Settings, ArrowLeft, GitBranch, Loader2,
-  Users, Package, UserCheck,
+  Users, Package, UserCheck, Receipt, Activity,
 } from 'lucide-react';
 
 const navItems = [
@@ -18,6 +18,8 @@ const navItems = [
   { title: 'Inventory', href: '/franchise/inventory', icon: Package },
   { title: 'Staff', href: '/franchise/staff', icon: UserCheck },
   { title: 'P&L', href: '/franchise/pnl', icon: TrendingUp },
+  { title: 'Commissions', href: '/franchise/commissions', icon: Receipt },
+  { title: 'Metrics', href: '/franchise/metrics', icon: Activity },
   { title: 'Settings', href: '/franchise/settings', icon: Settings },
 ];
 
