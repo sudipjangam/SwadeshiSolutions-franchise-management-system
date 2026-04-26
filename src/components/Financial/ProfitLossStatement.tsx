@@ -285,11 +285,31 @@ export const ProfitLossStatement = () => {
               </h3>
               <div className="space-y-2 pl-4">
                 <div className="flex justify-between">
-                  <span>Food Costs</span>
+                  <span>Food Costs (Manual)</span>
                   <span>
-                    {formatCurrency(plData.costOfGoodsSold.foodCosts)}
+                    {formatCurrency(plData.costOfGoodsSold.foodCosts - plData.costOfGoodsSold.inventoryConsumption)}
                   </span>
                 </div>
+                {plData.costOfGoodsSold.inventoryConsumption > 0 && (
+                  <div className="flex justify-between">
+                    <span className="flex items-center gap-1.5">
+                      Inventory Used <span className="text-[10px] px-1.5 py-0.5 rounded bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-300 font-semibold">FIFO</span>
+                    </span>
+                    <span>
+                      {formatCurrency(plData.costOfGoodsSold.inventoryConsumption)}
+                    </span>
+                  </div>
+                )}
+                {plData.costOfGoodsSold.inventoryWastage > 0 && (
+                  <div className="flex justify-between text-amber-600 dark:text-amber-400">
+                    <span className="flex items-center gap-1.5">
+                      Wastage Loss <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300 font-semibold">Waste</span>
+                    </span>
+                    <span>
+                      {formatCurrency(plData.costOfGoodsSold.inventoryWastage)}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <span>Beverage Costs</span>
                   <span>

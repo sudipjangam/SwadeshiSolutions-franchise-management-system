@@ -14,6 +14,8 @@ interface ProfitLossData {
     foodCosts: number;
     beverageCosts: number;
     roomSupplies: number;
+    inventoryConsumption: number;
+    inventoryWastage: number;
     totalCOGS: number;
   };
   grossProfit: number;
@@ -74,6 +76,32 @@ export const useProfitLoss = (startDate?: Date, endDate?: Date) => {
         .gte("expense_date", format(start, "yyyy-MM-dd"))
         .lte("expense_date", format(end, "yyyy-MM-dd"));
 
+      // Fetch auto-deducted inventory consumption cost (FIFO usage from kitchen prep)
+      const { data: inventoryUsage } = await supabase
+        .from("inventory_transactions")
+        .select("total_cost")
+        .eq("restaurant_id", restaurantId)
+        .eq("transaction_type", "usage")
+        .gte("created_at", startISO)
+        .lte("created_at", endISO);
+
+      const inventoryConsumptionCost = (inventoryUsage || []).reduce(
+        (sum, t) => sum + Math.abs(t.total_cost || 0), 0
+      );
+
+      // Fetch inventory wastage cost
+      const { data: wastageTransactions } = await supabase
+        .from("inventory_transactions")
+        .select("total_cost")
+        .eq("restaurant_id", restaurantId)
+        .eq("transaction_type", "waste")
+        .gte("created_at", startISO)
+        .lte("created_at", endISO);
+
+      const inventoryWastageCost = (wastageTransactions || []).reduce(
+        (sum, t) => sum + Math.abs(t.total_cost || 0), 0
+      );
+
       // Calculate revenue
       const foodSales = (orders || []).reduce(
         (sum, order) => sum + order.total,
@@ -91,14 +119,23 @@ export const useProfitLoss = (startDate?: Date, endDate?: Date) => {
         return acc;
       }, {} as Record<string, number>);
 
+      // COGS = manual expense entries + auto-deducted inventory (FIFO) + wastage
+      const manualFoodCosts = expensesByCategory.ingredients || 0;
+      const beverageCosts = expensesByCategory.beverages || 0;
+      const roomSupplies = expensesByCategory.room_supplies || 0;
+
       const costOfGoodsSold = {
-        foodCosts: expensesByCategory.ingredients || 0,
-        beverageCosts: expensesByCategory.beverages || 0,
-        roomSupplies: expensesByCategory.room_supplies || 0,
+        foodCosts: manualFoodCosts + inventoryConsumptionCost,
+        beverageCosts,
+        roomSupplies,
+        inventoryConsumption: inventoryConsumptionCost,
+        inventoryWastage: inventoryWastageCost,
         totalCOGS:
-          (expensesByCategory.ingredients || 0) +
-          (expensesByCategory.beverages || 0) +
-          (expensesByCategory.room_supplies || 0),
+          manualFoodCosts +
+          inventoryConsumptionCost +
+          inventoryWastageCost +
+          beverageCosts +
+          roomSupplies,
       };
 
       const grossProfit = totalRevenue - costOfGoodsSold.totalCOGS;
